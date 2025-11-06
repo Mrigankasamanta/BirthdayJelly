@@ -69,6 +69,11 @@
     </section>
     <!-- ====== END: Photo train gallery ====== -->
 
+    <div id="imageLightbox" class="lightbox-modal">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightboxImg">
+    </div>
+
     <script>
         // CONFIG
         const imageCount = 25; // তোমার ছবির সংখ্যা
@@ -78,6 +83,12 @@
         // DOM refs
         const trainStack = document.getElementById('trainStack');
         const trainArea = document.getElementById('trainArea');
+
+        // --- এই ৩টি লাইন যোগ করুন ---
+        const lightbox = document.getElementById('imageLightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        // --- যোগ করা শেষ ---
 
         // build cards
         const cards = [];
@@ -97,6 +108,17 @@
             card.appendChild(cap);
             trainStack.appendChild(card);
             cards.push(card);
+
+            // ====== START: লাইটবক্সের জন্য ক্লিক লিসেনার যোগ করুন ======
+            card.addEventListener('click', () => {
+                // শুধুমাত্র উপরের কার্ডটি ক্লিক করলেই খুলবে
+                if (card.classList.contains('top')) {
+                    stopCycle(); // গ্যালারির অটো-প্লে বন্ধ করুন
+                    lightboxImg.src = img.src; // মোডালের ভেতরে ছবি সেট করুন
+                    lightbox.style.display = 'flex'; // মোডালটি দেখান
+                }
+            });
+            // ====== END: লাইটবক্সের জন্য ক্লিক লিসেনার যোগ করুন ======
         }
 
         // stacking
@@ -115,6 +137,22 @@
         }
         applyStackClasses(current);
 
+        // ====== START: লাইটবক্স বন্ধ করার লিসেনার ======
+        // 'x' বাটনে ক্লিক করলে বন্ধ হবে
+        lightboxClose.addEventListener('click', () => {
+            lightbox.style.display = 'none'; // মোডাল লুকান
+            startCycle(); // গ্যালারির অটো-প্লে আবার চালু করুন
+        });
+
+        // ব্যাকগ্রাউন্ডে ক্লিক করলে বন্ধ হবে
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) { // যদি সরাসরি ব্যাকগ্রাউন্ডে ক্লিক হয়
+                lightbox.style.display = 'none';
+                startCycle(); // গ্যালারির অটো-প্লে আবার চালু করুন
+            }
+        });
+        // ====== END: লাইটবক্স বন্ধ করার লিসেনার ======
+        
         // flip
         function performTransition(fromIdx, toIdx, dir = 'next') {
             if (fromIdx === toIdx) return;
