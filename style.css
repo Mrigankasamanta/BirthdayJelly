@@ -6,7 +6,7 @@ body {
 }
 
 img {
-    width : 90px;
+    width: 90px;
 }
 
 .star {
@@ -43,7 +43,8 @@ img {
     cursor: pointer;
     transform-style: preserve-3d;
     transform: perspective(2500px);
-    transition: 4s;
+    /* ট্রানজিশন টাইম 4s থেকে 0.4s করা হলো */
+    transition: 0.4s;
 }
 
 .birthdayCard:hover {
@@ -270,7 +271,7 @@ img {
 
 .wishes {
     position: relative;
-    top: -200px;
+    top: -230px;
     margin: 25px;
 }
 
@@ -287,146 +288,228 @@ p {
 
 /* folder wrapper */
 .folder {
-  max-width: 900px;
-  margin: 30px auto;
-  padding: 18px;
-  position: relative;
-  z-index: 5;
-  background: rgba(255,255,255,0.02); /* subtle */
-  border-radius: 10px;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 18px;
+    position: relative;
+    z-index: 5;
+    background: rgba(255, 255, 255, 0.02);
+    /* subtle */
+    border-radius: 10px;
 }
 
 /* train wrapper */
 .train-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 860px;
-  height: 420px;        /* change smaller on mobile via media queries */
-  perspective: 1200px;
-  margin: 0 auto;
+    position: relative;
+    width: 100%;
+    max-width: 860px;
+    height: 420px;
+    /* change smaller on mobile via media queries */
+    perspective: 1200px;
+    margin: 0 auto;
 }
 
 /* inner stack area (JS will fill) */
 #trainStack {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }
 
 /* stacked card */
 .stack-card {
-  pointer-events: auto;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor: default;
-  transition: transform 700ms cubic-bezier(.2,.9,.2,1), opacity 600ms ease, filter 600ms ease;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-  background: #f6f6f6;
+    pointer-events: auto;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    transition: transform 700ms cubic-bezier(.2, .9, .2, 1), opacity 600ms ease, filter 600ms ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    background: #f6f6f6;
 }
 
 /* ensure the image fills and crops to frame */
 .stack-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;       /* <-- makes each photo fill the frame */
-  object-position: center;
-  display:block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* <-- makes each photo fill the frame */
+    object-position: center;
+    display: block;
 }
 
 /* caption inside each card */
 .stack-card .stack-caption {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 14px;
-  margin: 0 auto;
-  max-width: 85%;
-  pointer-events: none;
-  background: rgba(255,255,255,0.9);
-  padding: 6px 10px;
-  border-radius: 8px;
-  text-align:center;
-  font-size: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+    margin: 0 auto;
+    max-width: 85%;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 6px 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 /* states for stack (keep simple) */
-.stack-card.top { transform: rotateX(0deg) translateY(0) scale(1); opacity:1; z-index:30; }
-.stack-card.below { transform: translateY(12px) scale(0.985); opacity:0.95; z-index:20; }
-.stack-card.deep { transform: translateY(24px) scale(0.96); opacity:0.9; z-index:10; }
+.stack-card.top {
+    transform: rotateX(0deg) translateY(0) scale(1);
+    opacity: 1;
+    z-index: 30;
+}
+
+.stack-card.below {
+    transform: translateY(12px) scale(0.985);
+    opacity: 0.95;
+    z-index: 20;
+}
+
+.stack-card.deep {
+    transform: translateY(24px) scale(0.96);
+    opacity: 0.9;
+    z-index: 10;
+}
 
 /* flip anims */
-.stack-card.flip-up { transform: rotateX(-90deg) translateY(-30px) scale(0.98); opacity:0; z-index:40; pointer-events:none; }
-.stack-card.flip-initial { transform: rotateX(90deg) translateY(20px) scale(0.99); opacity:0; z-index:25; pointer-events:none; }
-.stack-card.flip-in { transform: rotateX(0deg) translateY(0) scale(1); opacity:1; pointer-events:auto; }
-.stack-card.flip-in-rev { transform: rotateX(0deg) translateY(0) scale(1); opacity:1; pointer-events:auto; }
-.stack-card.flip-down { transform: rotateX(90deg) translateY(30px) scale(0.98); opacity:0; pointer-events:none; }
+.stack-card.flip-up {
+    transform: rotateX(-90deg) translateY(-30px) scale(0.98);
+    opacity: 0;
+    z-index: 40;
+    pointer-events: none;
+}
+
+.stack-card.flip-initial {
+    transform: rotateX(90deg) translateY(20px) scale(0.99);
+    opacity: 0;
+    z-index: 25;
+    pointer-events: none;
+}
+
+.stack-card.flip-in {
+    transform: rotateX(0deg) translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.stack-card.flip-in-rev {
+    transform: rotateX(0deg) translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.stack-card.flip-down {
+    transform: rotateX(90deg) translateY(30px) scale(0.98);
+    opacity: 0;
+    pointer-events: none;
+}
 
 /* nav buttons */
 .train-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  cursor: pointer;
-  transition: transform .12s ease, background .12s ease;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    cursor: pointer;
+    transition: transform .12s ease, background .12s ease;
 }
-.train-nav:hover { transform: translateY(-50%) scale(1.06); background: rgba(0,0,0,0.65); }
-.train-prev { left: 12px; }
-.train-next { right: 12px; }
+
+.train-nav:hover {
+    transform: translateY(-50%) scale(1.06);
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.train-prev {
+    left: 12px;
+}
+
+.train-next {
+    right: 12px;
+}
 
 /* reduce birthdayCard overlap and ensure it stays above background but under gallery if desired */
 .birthdayCard {
-  z-index: 60;
-  transition: transform 0.8s ease;
-}
-.birthdayCard:hover {
-  transform: perspective(2000px) rotate(3deg) translateY(-6px);
+    z-index: 60;
+    /* transition: transform 0.8s ease; (আগের ট্রানজিশনের সাথে কনফ্লিক্ট করছিল, তাই এটি বাদ দেওয়া হলো) */
 }
 
-/* inside text fix so text doesn't overflow the card */
-/* .inside-text {
-  position: relative;
-  left: 0;
-  top: 0;
-  transform: none;
-  padding-top: 8px;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-} */
+/* এই :hover রুলটি মিডিয়া কোয়েরির ভেতরেও যোগ করা হয়েছে */
+.birthdayCard:hover {
+    transform: perspective(2000px) rotate(3deg) translateY(-6px);
+}
 
 /* adjust sizes on small screens */
 @media (max-width: 900px) {
-  .train-wrapper { height: 320px; }
-  .folder { max-width: 95%; margin-top: 20px; }
-  .birthdayCard { width: 230px; height: 320px; }
-}
-@media (max-width: 600px) {
-  .train-wrapper { height: 260px; }
-  .stack-card .stack-caption { font-size: 13px; bottom: 8px; padding:6px 8px; }
-  .birthdayCard { width: 200px; height: 300px; }
+    .train-wrapper {
+        height: 320px;
+    }
+
+    .folder {
+        max-width: 95%;
+        margin-top: 20px;
+    }
+
+    /* === পরিবর্তন শুরু === */
+    .birthdayCard {
+        /* width এবং height বাদ দিয়ে scale যোগ করা হলো */
+        transform: perspective(2500px) scale(0.9);
+        /* মোবাইল ডিভাইসে হোভার কম হয়, তাও সামঞ্জস্যের জন্য রাখা হলো */
+        transition: 0.4s;
+    }
+
+    .birthdayCard:hover {
+        /* হোভার স্টেটকেও scale করতে হবে */
+        transform: perspective(2500px) rotate(5deg) scale(0.9);
+    }
+
+    /* === পরিবর্তন শেষ === */
 }
 
+@media (max-width: 600px) {
+    .train-wrapper {
+        height: 260px;
+    }
+
+    .stack-card .stack-caption {
+        font-size: 13px;
+        bottom: 8px;
+        padding: 6px 8px;
+    }
+
+    /* === পরিবর্তন শুরু === */
+    .birthdayCard {
+        /* width এবং height বাদ দিয়ে scale যোগ করা হলো */
+        transform: perspective(2500px) scale(0.8);
+    }
+
+    .birthdayCard:hover {
+        /* হোভার স্টেটকেও scale করতে হবে */
+        transform: perspective(2500px) rotate(5deg) scale(0.8);
+    }
+
+    /* === পরিবর্তন শেষ === */
+}
