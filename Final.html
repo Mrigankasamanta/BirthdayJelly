@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday card</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <img src="ZUiY.gif" alt="stars" class="star">
+    <img src="5l03.gif" alt="ballon" class="ballon">
+    <div class="container">
+        <div class="birthdayCard">
+            <div class="cardFront">
+                <div class="front-text">
+                    <h3 class="happy">HAPPY</h3>
+                    <h2 class="bday">BIRTHDAY</h2>
+                    <h3 class="toyou">to you!</h3>
+                </div>
+                <div class="wrap-deco">
+                    <div class="decorations"></div>
+                    <div class="decorationsTwo"></div>
+                </div>
+                <div class="wrap-decoTwo">
+                    <div class="decorations"></div>
+                    <div class="decorationsThree"></div>
+                </div>
+                <div class="plate">
+                    <div class="cake"></div>
+                    <div class="flame"></div>
+                </div>
+            </div>
+            <div class="cardInside">
+                <div class="img">
+                    <img src="penguin.jpg" alt="Brotherpic" class="bdyboy">
+                    <img src="6ob.gif" alt="confetti" class="confetti">
+                </div>
+                <div class="inside-text">
+                    <h3 class="happy">HAPPY</h3>
+                    <h2 class="bday">BIRTHDAY</h2>
+                    <h3 class="toyou">to you!</h3>
+                </div>
+                <div class="wishes">
+                    <p>Dear Jelly,</p>
+                    <p>Happy birthday!! I hope your day is filled with lots of love and laughter! May all of your
+                        birthday
+                        wishes come true.</p>
+                    <p class="name">~ Your Motu❤️</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <img src="4SHX.gif" alt="cat" class="cat">
+
+    <!-- ====== START: Photo train gallery (paste right after the .cat image) ====== -->
+    <section class="folder" aria-label="Photo folder">
+        <div id="trainArea" class="train-wrapper" role="region" aria-label="Photo train">
+            <div id="trainStack" aria-hidden="false"></div>
+
+            <!-- manual nav buttons -->
+            <button id="trainPrev" class="train-nav train-prev" aria-label="Previous">&#10094;</button>
+            <button id="trainNext" class="train-nav train-next" aria-label="Next">&#10095;</button>
+        </div>
+
+        <div id="trainBelowCaption" class="stack-caption" aria-hidden="true" style="display:none;">&nbsp;</div>
+    </section>
+    <!-- ====== END: Photo train gallery ====== -->
+
+    <script>
+        // CONFIG
+        const imageCount = 25; // তোমার ছবির সংখ্যা
+        const imgFolder = 'images'; // images ফোল্ডার
+        const captions = Array.from({ length: imageCount }, (_, i) => `স্মৃতি ${i + 1}`);
+
+        // DOM refs
+        const trainStack = document.getElementById('trainStack');
+        const trainArea = document.getElementById('trainArea');
+
+        // build cards
+        const cards = [];
+        for (let i = 1; i <= imageCount; i++) {
+            const num = String(i).padStart(2, '0');
+            const src = `${imgFolder}/photo${num}.jpg`;
+            const card = document.createElement('div');
+            card.className = 'stack-card';
+            card.dataset.index = i - 1;
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = captions[i - 1] || `photo ${i}`;
+            const cap = document.createElement('div');
+            cap.className = 'stack-caption';
+            cap.textContent = captions[i - 1] || '';
+            card.appendChild(img);
+            card.appendChild(cap);
+            trainStack.appendChild(card);
+            cards.push(card);
+        }
+
+        // stacking
+        let current = 0;
+        function applyStackClasses(activeIndex) {
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                card.classList.remove('top', 'below', 'deep', 'flip-up', 'flip-initial', 'flip-in', 'flip-down', 'flip-in-rev');
+                const rel = (i - activeIndex + cards.length) % cards.length;
+                if (rel === 0) { card.classList.add('top'); card.style.zIndex = 30; }
+                else if (rel === 1) { card.classList.add('below'); card.style.zIndex = 20; }
+                else { card.classList.add('deep'); card.style.zIndex = 10; }
+            }
+            const belowCaption = document.getElementById('trainBelowCaption');
+            if (belowCaption) { belowCaption.style.display = 'block'; belowCaption.textContent = captions[activeIndex] || ''; }
+        }
+        applyStackClasses(current);
+
+        // flip
+        function performTransition(fromIdx, toIdx, dir = 'next') {
+            if (fromIdx === toIdx) return;
+            const outgoing = cards[fromIdx];
+            const incoming = cards[toIdx];
+            if (dir === 'next') {
+                incoming.classList.add('flip-initial'); incoming.style.zIndex = 25;
+                requestAnimationFrame(() => {
+                    outgoing.classList.add('flip-up'); incoming.classList.remove('flip-initial'); incoming.classList.add('flip-in');
+                    setTimeout(() => { cards.forEach(c => c.classList.remove('flip-up', 'flip-initial', 'flip-in', 'flip-down', 'flip-in-rev')); current = toIdx; applyStackClasses(current); }, 780);
+                });
+            } else {
+                incoming.classList.add('flip-initial'); incoming.style.zIndex = 25;
+                requestAnimationFrame(() => {
+                    outgoing.classList.add('flip-down'); incoming.classList.remove('flip-initial'); incoming.classList.add('flip-in-rev');
+                    setTimeout(() => { cards.forEach(c => c.classList.remove('flip-up', 'flip-initial', 'flip-in', 'flip-down', 'flip-in-rev')); current = toIdx; applyStackClasses(current); }, 780);
+                });
+            }
+        }
+
+        function doFlip() { performTransition(current, (current + 1) % cards.length, 'next'); }
+        function doPrevFlip() { performTransition(current, (current - 1 + cards.length) % cards.length, 'prev'); }
+
+        // autoplay
+        let intervalMs = 3000;
+        let cycleTimer = null;
+        function startCycle() { if (cycleTimer) return; cycleTimer = setInterval(doFlip, intervalMs); }
+        function stopCycle() { if (!cycleTimer) return; clearInterval(cycleTimer); cycleTimer = null; }
+        setTimeout(() => startCycle(), 1500);
+
+        // pause on hover
+        trainArea.addEventListener('mouseenter', stopCycle);
+        trainArea.addEventListener('mouseleave', startCycle);
+
+        // manual nav
+        document.getElementById('trainPrev').addEventListener('click', (e) => { e.stopPropagation(); stopCycle(); doPrevFlip(); setTimeout(() => startCycle(), intervalMs + 200); });
+        document.getElementById('trainNext').addEventListener('click', (e) => { e.stopPropagation(); stopCycle(); doFlip(); setTimeout(() => startCycle(), intervalMs + 200); });
+
+        // keyboard
+        document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { stopCycle(); doFlip(); setTimeout(() => startCycle(), intervalMs + 200); } else if (e.key === 'ArrowLeft') { stopCycle(); doPrevFlip(); setTimeout(() => startCycle(), intervalMs + 200); } });
+
+    </script>
+
+</body>
+
+</html>
