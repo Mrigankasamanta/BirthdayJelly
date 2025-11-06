@@ -513,3 +513,57 @@ p {
 
     /* === পরিবর্তন শেষ === */
 }
+
+/* ====== START: Lightbox Styles ====== */
+
+.lightbox-modal {
+    display: none; /* ডিফল্টভাবে লুকানো থাকবে */
+    position: fixed; /* স্ক্রিনের উপরে থাকবে */
+    z-index: 9999; /* সবকিছুর উপরে থাকবে */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* দরকার হলে স্ক্রল করার জন্য */
+    background-color: rgba(0, 0, 0, 0.9); /* কালো ব্যাকগ্রাউন্ড */
+    /* ছবিকে মাঝখানে আনার জন্য */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-content {
+    margin: auto;
+    display: block;
+    min-width: 80%;
+    /* min-width: 40%;
+    max-width: 90%; ছবিটি যেন স্ক্রিন থেকে বেরিয়ে না যায় */
+    height:auto; /* উচ্চতাও যেন ঠিক থাকে */
+    animation: lightboxZoom 0.3s ease; /* জুম অ্যানিমেশন */
+}
+
+/* জুম অ্যানিমেশন */
+@keyframes lightboxZoom {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* ====== END: Lightbox Styles ====== */
