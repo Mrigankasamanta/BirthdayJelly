@@ -279,6 +279,20 @@
 </head>
 
 <body>
+
+    <div id="welcomeScreen"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 1s ease;">
+        <h1 style="color: white; font-family: sans-serif; margin-bottom: 20px;">A Special Surprise For You! 🎁</h1>
+        <button id="enterBtn"
+            style="padding: 15px 30px; font-size: 20px; background: #ff4081; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 0 20px rgba(255, 64, 129, 0.5);">
+            Click to Open ❤️
+        </button>
+    </div>
+    <audio id="bgMusic" loop>
+        <source src="song2.mp3" type="audio/mpeg">
+        আপনার ব্রাউজার অডিও সাপোর্ট করে না।
+    </audio>
+
     <div class="background"></div>
     <canvas id="starCanvas"></canvas>
     <canvas id="petalsCanvas"></canvas>
@@ -313,6 +327,27 @@
             petalsCanvas.width = window.innerWidth;
             petalsCanvas.height = window.innerHeight;
         }
+
+         // ====== START: Music & Overlay Logic ======
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const enterBtn = document.getElementById('enterBtn');
+        const bgMusic = document.getElementById('bgMusic');
+
+        enterBtn.addEventListener('click', () => {
+            // গান প্লে করা
+            bgMusic.play().then(() => {
+                console.log("Music playing...");
+            }).catch(e => {
+                console.log("Audio play failed:", e);
+            });
+
+            // ওয়েলকাম স্ক্রিন সরিয়ে দেওয়া
+            welcomeScreen.style.opacity = '0';
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+            }, 1000); // ১ সেকেন্ড ফেড আউট ইফেক্ট
+        });
+        // ====== END: Music & Overlay Logic ======
 
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();

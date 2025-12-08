@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,9 +26,17 @@
         }
 
         @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .glass-container {
@@ -36,7 +45,7 @@
             border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 25px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15),
-                        inset 0 0 20px rgba(255, 255, 255, 0.5);
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
             padding: 2.5rem;
             width: 90%;
             max-width: 500px;
@@ -55,12 +64,10 @@
             left: -100%;
             width: 50%;
             height: 100%;
-            background: linear-gradient(
-                to right, 
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 0.3) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
+            background: linear-gradient(to right,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    rgba(255, 255, 255, 0) 100%);
             transform: skewX(-25deg);
             transition: all 0.7s ease;
         }
@@ -127,9 +134,17 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .heart {
@@ -154,8 +169,15 @@
         }
 
         @keyframes bubbleFloat {
-            0% { transform: translateY(100vh) scale(0.3); opacity: 0.3; }
-            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+            0% {
+                transform: translateY(100vh) scale(0.3);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
         }
 
         .side-decoration {
@@ -183,12 +205,19 @@
             font-size: 2rem;
             animation: sideBounce 3s ease-in-out infinite;
             animation-delay: calc(var(--delay) * 1s);
-            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.1));
         }
 
         @keyframes sideBounce {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(10px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
         }
 
         .gif-container {
@@ -198,7 +227,7 @@
             height: 200px;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             opacity: 0;
             transform: translateY(20px);
             position: relative;
@@ -221,8 +250,15 @@
         }
 
         @keyframes topEmojiFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(10deg); }
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(10deg);
+            }
         }
 
         /* Mobile responsive adjustments */
@@ -230,44 +266,60 @@
             .side-decoration {
                 width: 50px;
             }
-            
+
             .side-item {
                 font-size: 1.5rem;
             }
-            
+
             .glass-container {
                 padding: 1.5rem;
             }
-            
+
             .message {
                 font-size: 1.4rem;
             }
-            
+
             .gif-container {
                 height: 150px;
             }
-            
+
             .top-emoji {
                 font-size: 1.5rem;
             }
         }
-        
+
         @media (max-width: 480px) {
             .side-decoration {
                 width: 30px;
             }
-            
+
             .side-item {
                 font-size: 1rem;
             }
-            
+
             .message {
                 font-size: 1.2rem;
             }
         }
     </style>
 </head>
+
 <body class="px-4">
+
+    <div id="welcomeScreen"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 1s ease;">
+        <h1 style="color: white; font-family: sans-serif; margin-bottom: 20px;">Start this beautiful web site</h1>
+        <button id="enterBtn"
+            style="padding: 15px 30px; font-size: 20px; background: #ff4081; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 0 20px rgba(255, 64, 129, 0.5);">
+            Click Here
+        </button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="song1.mp3" type="audio/mpeg">
+        আপনার ব্রাউজার অডিও সাপোর্ট করে না।
+    </audio>
+
     <!-- Top floating emojis -->
     <span class="top-emoji" style="left: 15%;">✨</span>
     <span class="top-emoji" style="left: 35%;">🎂</span>
@@ -316,38 +368,59 @@
         // Create decorative elements
         function createDecorations() {
             const decorationsContainer = document.getElementById('decorations');
-            
+
             // Create floating bubbles
             for (let i = 0; i < 20; i++) {
                 const bubble = document.createElement('div');
                 bubble.classList.add('bubble');
-                
+
                 // Random properties
                 const size = Math.random() * 60 + 20;
                 const posX = Math.random() * 100;
                 const delay = Math.random() * 20;
                 const duration = Math.random() * 10 + 10;
-                
+
                 bubble.style.width = `${size}px`;
                 bubble.style.height = `${size}px`;
                 bubble.style.left = `${posX}%`;
                 bubble.style.animationDuration = `${duration}s`;
                 bubble.style.animationDelay = `${delay}s`;
-                
+
                 decorationsContainer.appendChild(bubble);
             }
         }
 
+        // ====== START: Music & Overlay Logic ======
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const enterBtn = document.getElementById('enterBtn');
+        const bgMusic = document.getElementById('bgMusic');
+
+        enterBtn.addEventListener('click', () => {
+            // গান প্লে করা
+            bgMusic.play().then(() => {
+                console.log("Music playing...");
+            }).catch(e => {
+                console.log("Audio play failed:", e);
+            });
+
+            // ওয়েলকাম স্ক্রিন সরিয়ে দেওয়া
+            welcomeScreen.style.opacity = '0';
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+            }, 1000); // ১ সেকেন্ড ফেড আউট ইফেক্ট
+        });
+        // ====== END: Music & Overlay Logic ======
+
         // Initialize elements
         document.addEventListener('DOMContentLoaded', () => {
             createDecorations();
-            
+
             const messageContainer = document.getElementById('messageContainer');
             const initialMessage = document.getElementById('initialMessage');
             const secondMessage = document.getElementById('secondMessage');
             const enterButton = document.getElementById('enterButton');
             const gifContainer = document.getElementById('gifContainer');
-            
+
             // Click handler for container
             messageContainer.addEventListener('click', () => {
                 // Transition messages with GSAP
@@ -358,11 +431,11 @@
                     onComplete: () => {
                         initialMessage.classList.add('hidden');
                         secondMessage.classList.remove('hidden');
-                        gsap.fromTo(secondMessage, 
-                            {opacity: 0, y: 20},
-                            {opacity: 1, y: 0, duration: 0.5}
+                        gsap.fromTo(secondMessage,
+                            { opacity: 0, y: 20 },
+                            { opacity: 1, y: 0, duration: 0.5 }
                         );
-                        
+
                         // Show the enter button
                         gsap.to(enterButton, {
                             opacity: 1,
@@ -370,7 +443,7 @@
                             duration: 0.8,
                             delay: 0.3
                         });
-                        
+
                         // Show the GIF container
                         gsap.to(gifContainer, {
                             opacity: 1,
@@ -380,11 +453,11 @@
                         });
                     }
                 });
-                
+
                 // Create hearts animation
                 createHearts();
             });
-            
+
             // Heartbeat animation for button
             enterButton.addEventListener('mouseenter', () => {
                 gsap.to(enterButton, {
@@ -394,11 +467,11 @@
                     yoyo: true
                 });
             });
-            
+
             // Create hearts effect
             function createHearts() {
                 const emojis = ['❤️', '💖', '💕', '💓', '💗', '💘', '💝'];
-                
+
                 for (let i = 0; i < 15; i++) {
                     setTimeout(() => {
                         const heart = document.createElement('div');
@@ -406,17 +479,17 @@
                         heart.innerHTML = randomEmoji;
                         heart.classList.add('heart');
                         heart.style.fontSize = `${Math.random() * 20 + 10}px`;
-                        
+
                         // Position around the container
                         const containerRect = messageContainer.getBoundingClientRect();
                         const startX = containerRect.x + Math.random() * containerRect.width;
                         const startY = containerRect.y + containerRect.height;
-                        
+
                         heart.style.left = `${startX}px`;
                         heart.style.top = `${startY}px`;
-                        
+
                         document.body.appendChild(heart);
-                        
+
                         // Animate the heart
                         gsap.to(heart, {
                             y: -150 - Math.random() * 100,
@@ -429,7 +502,7 @@
                                 heart.remove();
                             }
                         });
-                        
+
                         gsap.to(heart, {
                             scale: 0.5,
                             duration: 2,
@@ -438,12 +511,12 @@
                     }, i * 100);
                 }
             }
-            
+
             // Enter button click effect
             enterButton.addEventListener('click', () => {
                 // You can redirect to the main birthday page here
                 window.location.href = "birthday-main.html";
-                
+
                 // For demonstration, we'll just add a celebratory effect
                 gsap.to(document.body, {
                     backgroundColor: "#ffd6e0",
@@ -451,7 +524,7 @@
                     yoyo: true,
                     repeat: 1
                 });
-                
+
                 // Zoom effect on GIF
                 gsap.to(gifContainer, {
                     scale: 1.1,
@@ -459,14 +532,15 @@
                     yoyo: true,
                     repeat: 1
                 });
-                
+
                 createHearts();
             });
-            
+
             // Initialize with hidden elements
-            gsap.set(enterButton, {opacity: 0, y: 20});
-            gsap.set(gifContainer, {opacity: 0, y: 20});
+            gsap.set(enterButton, { opacity: 0, y: 20 });
+            gsap.set(gifContainer, { opacity: 0, y: 20 });
         });
     </script>
 </body>
+
 </html>
