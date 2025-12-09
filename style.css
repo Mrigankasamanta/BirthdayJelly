@@ -666,4 +666,8 @@ p {
     position: absolute;
     top: 5px;
     right: 5px;
+
+}
+#sms {
+    color: #a6e1e1;
 }
