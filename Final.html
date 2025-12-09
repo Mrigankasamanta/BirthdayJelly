@@ -6,6 +6,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Birthday Card for Jelly</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ============ ১. কার্ড লকের স্টাইল ============ */
+        #cardLock {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 450px;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        #lockedCardArea {
+            filter: blur(8px);
+            pointer-events: none;
+            transition: filter 0.5s ease;
+        }
+
+        /* ============ ২. ফিক্সড হেডার/ফুটার ও স্ক্রলবডি স্টাইল (UPDATED) ============ */
+        .wishes {
+            /* পুরো এরিয়াটাকে ফ্লেক্সবক্স বানালাম */
+            display: flex;
+            flex-direction: column;
+            height: 220px; /* কার্ডের ভেতরের জায়গাটুকু ফিক্সড */
+            font-size: 14px;
+        }
+
+        /* উপরের Dear Jelly ফিক্সড থাকবে */
+        .wishes-header {
+            font-weight: bold;
+            margin-bottom: 8px;
+            flex-shrink: 0; /* এটা কখনো ছোট হবে না */
+        }
+
+        /* মাঝখানের লেখা স্ক্রল হবে */
+        .wishes-body {
+            flex-grow: 1; /* বাকি সব জায়গা নিয়ে নেবে */
+            overflow-y: auto; /* লেখা বেশি হলে স্ক্রল হবে */
+            padding-right: 5px;
+            text-align: justify;
+            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+
+        /* নিচের নাম ফিক্সড থাকবে */
+        .wishes-footer {
+            font-weight: bold;
+            color: #d81b60;
+            text-align: right;
+            margin-top: 5px;
+            flex-shrink: 0; /* এটা কখনো ছোট হবে না */
+        }
+
+        /* স্ক্রলবারের ডিজাইন */
+        .wishes-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .wishes-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .wishes-body::-webkit-scrollbar-thumb {
+            background: #ff4081;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,71 +91,101 @@
 
     <img src="ZUiY.gif" alt="stars" class="star">
     <img src="5l03.gif" alt="ballon" class="ballon">
-    <div class="container">
-        <div class="birthdayCard">
-            <div class="cardFront">
-                <div class="front-text">
-                    <h3 class="happy">HAPPY</h3>
-                    <h2 class="bday">BIRTHDAY</h2>
-                    <h3 class="toyou">to you Jelly!</h3>
+
+    <div class="container" style="position: relative;">
+
+        <div id="cardLock">
+            <h1 style="font-size: 40px; margin: 0;">🔒</h1>
+            <h2 style="color: #ff4081; font-family: sans-serif; margin: 10px 0;">Secret Message</h2>
+            <p style="font-size: 14px; margin-bottom: 20px; padding: 0 20px;">This card is locked for Jelly only.</p>
+
+            <input type="password" id="cardPassInput" placeholder="Password"
+                style="padding: 8px; border-radius: 5px; border: none; margin-bottom: 10px; text-align: center; width: 70%;">
+
+            <button onclick="unlockSecretCard()"
+                style="padding: 8px 20px; background: #ff4081; color: white; border: none; border-radius: 50px; cursor: pointer;">
+                Unlock
+            </button>
+            <p id="lockError" style="color: red; font-size: 12px; margin-top: 10px; display: none;">Wrong Password!</p>
+        </div>
+
+        <div id="lockedCardArea">
+            <div class="birthdayCard">
+                <div class="cardFront">
+                    <div class="front-text">
+                        <h3 class="happy">HAPPY</h3>
+                        <h2 class="bday">BIRTHDAY</h2>
+                        <h3 class="toyou">to you Jelly!</h3>
+                    </div>
+                    <div class="wrap-deco">
+                        <div class="decorations"></div>
+                        <div class="decorationsTwo"></div>
+                    </div>
+                    <div class="wrap-decoTwo">
+                        <div class="decorations"></div>
+                        <div class="decorationsThree"></div>
+                    </div>
+                    <div class="plate">
+                        <div class="cake"></div>
+                        <div class="flame"></div>
+                    </div>
                 </div>
-                <div class="wrap-deco">
-                    <div class="decorations"></div>
-                    <div class="decorationsTwo"></div>
-                </div>
-                <div class="wrap-decoTwo">
-                    <div class="decorations"></div>
-                    <div class="decorationsThree"></div>
-                </div>
-                <div class="plate">
-                    <div class="cake"></div>
-                    <div class="flame"></div>
-                </div>
-            </div>
-            <div class="cardInside">
-                <div class="img">
-                    <img src="penguin.jpg" alt="Brotherpic" class="bdyboy">
-                    <img src="6ob.gif" alt="confetti" class="confetti">
-                </div>
-                <div class="inside-text">
-                    <h3 class="happy">HAPPY</h3>
-                    <h2 class="bday">BIRTHDAY</h2>
-                    <h3 class="toyou">to you Janu</h3>
-                </div>
-                <div class="wishes">
-                    <p>Dear Jelly,</p>
-                    <p>Happy birthday!! I hope your day is filled with lots of love and laughter! May all of your
-                        birthday wishes come true.</p>
-                    <p class="name">~ Your Motu❤️</p>
+                <div class="cardInside">
+                    <div class="img">
+                        <img src="penguin.jpg" alt="Brotherpic" class="bdyboy">
+                        <img src="6ob.gif" alt="confetti" class="confetti">
+                    </div>
+                    <div class="inside-text">
+                        <h3 class="happy">HAPPY</h3>
+                        <h2 class="bday">BIRTHDAY</h2>
+                        <h3 class="toyou">to you Janu</h3>
+                    </div>
+                    
+                    <div class="wishes">
+                        <div class="wishes-header">Dear Jelly,</div>
+                        
+                        <div class="wishes-body">
+                            <p>Happy Birthday! 🎉 Today you officially get one year cooler (and a little crazier 😜). May
+                                your cake be huge, your gifts be expensive, and your life be full of love, laughter & zero
+                                stress! Enjoy your special day!</p>
+                            <br>
+                            <p>আজকের দিনটা তোর জন্য অনেক স্পেশাল, তাই একটু বড় করে লিখছি। তুই আমার জীবনের সবচেয়ে সুন্দর গিফট। 
+                            সারাজীবন এভাবেই পাশে থাকিস, আর এভাবেই আমার মাথা খেয়ে যাস! 😆</p>
+                            <br>
+                            <p>আর হ্যাঁ, এবার কিন্তু আর ঝগড়া করবি না! 😛 এই বছরের birthday টা আমি ভালো করে দিলাম, শুধু
+                                হাসিস আর enjoy করিস! অনেক অনেক ভালোবাসা তোর জন্য।</p>
+                            <br>
+                            <p>তুই ভালো থাকলে আমিও ভালো থাকি। নিজের খেয়াল রাখিস। লাভ ইউ! ❤️</p>
+                            <br>
+                            <p>I Love You So Much.আমার পাগলি গরুটা তোর সাথে মারামারি ঝগড়া করতে আমার হেব্বি লাগে . I love you 😘!</p>
+                        </div>
+                        
+                        <div class="wishes-footer">~ Your Motu❤️</div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
-
     <img src="4SHX.gif" alt="cat" class="cat">
 
     <section class="folder" aria-label="Photo folder">
         <div id="trainArea" class="train-wrapper" role="region" aria-label="Photo train">
             <div id="trainStack" aria-hidden="false"></div>
-
             <button id="trainPrev" class="train-nav train-prev" aria-label="Previous">&#10094;</button>
             <button id="trainNext" class="train-nav train-next" aria-label="Next">&#10095;</button>
         </div>
-
         <div id="trainBelowCaption" class="stack-caption" aria-hidden="true" style="display:none;">&nbsp;</div>
     </section>
 
     <div class="wish-container">
         <h2 class="wish-title">Leave a Wish for Jelly! 💌</h2>
-
         <div class="input-group">
             <input type="text" id="wisherName" placeholder="তোমার নাম (Your Name)">
             <textarea id="wisherMessage" placeholder="এখানে উইশ লেখো... (Write your wish)"></textarea>
             <button onclick="sendWish()">Send Wish 🚀</button>
         </div>
-
-        <div id="messagesArea" class="messages-list">
-        </div>
+        <div id="messagesArea" class="messages-list"></div>
     </div>
 
     <div id="imageLightbox" class="lightbox-modal">
@@ -90,7 +195,27 @@
 
     <script type="module">
         // ==========================================
-        // 1. FIREBASE CONFIGURATION
+        // 1. CARD UNLOCK LOGIC
+        // ==========================================
+        window.unlockSecretCard = function () {
+            const input = document.getElementById('cardPassInput').value;
+            const lockScreen = document.getElementById('cardLock');
+            const cardArea = document.getElementById('lockedCardArea');
+            const errorMsg = document.getElementById('lockError');
+
+            const correctPassword = "851420";
+
+            if (input === correctPassword) {
+                lockScreen.style.display = 'none';
+                cardArea.style.filter = 'none';
+                cardArea.style.pointerEvents = 'auto';
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // ==========================================
+        // 2. FIREBASE CONFIGURATION
         // ==========================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, push, onChildAdded, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -109,7 +234,6 @@
         const db = getDatabase(app);
         const messagesRef = ref(db, 'wishes');
 
-        // --- Send Message Function ---
         window.sendWish = function () {
             const name = document.getElementById('wisherName').value;
             const msg = document.getElementById('wisherMessage').value;
@@ -131,7 +255,6 @@
             });
         }
 
-        // --- Load Messages Function ---
         onChildAdded(messagesRef, (snapshot) => {
             const data = snapshot.val();
             const key = snapshot.key;
@@ -155,10 +278,9 @@
             list.insertBefore(div, list.firstChild);
         }
 
-        // --- Admin Reply Function ---
         window.adminReply = function (key) {
             const pass = prompt("Enter Admin Password to Reply:");
-            if (pass === "122004") {
+            if (pass === "851420") {
                 const replyText = prompt("Type your reply:");
                 if (replyText) {
                     const updates = {};
@@ -172,23 +294,21 @@
         }
 
         // ==========================================
-        // 2. MUSIC ON FIRST CLICK LOGIC
+        // 3. MUSIC ON CLICK
         // ==========================================
-        // পেজে যে কোনো জায়গায় ক্লিক করলে গান বাজবে
-        document.addEventListener('click', function() {
+        document.addEventListener('click', function () {
             const bgMusic = document.getElementById('bgMusic');
-            // গান যদি পজ (paused) থাকে তবেই প্লে হবে
-            if(bgMusic.paused) {
+            if (bgMusic.paused) {
                 bgMusic.play().then(() => {
                     console.log("Music started!");
                 }).catch(e => {
                     console.log("Audio play failed:", e);
                 });
             }
-        }, { once: true }); // { once: true } মানে এই কোডটা একবারই রান হবে
+        }, { once: true });
 
         // ==========================================
-        // 3. GALLERY & CAPTION LOGIC
+        // 4. GALLERY & CAPTION LOGIC
         // ==========================================
         const imageCount = 33;
         const imgFolder = 'images';
@@ -328,6 +448,5 @@
 
     </script>
 </body>
-
 
 </html>
