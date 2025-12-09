@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Card</title>
+    <title>Birthday Card for Jelly</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
     <audio id="bgMusic" loop>
         <source src="song4.mp3" type="audio/mpeg">
-        আপনার ব্রাউজার অডিও সাপোর্ট করে না।
     </audio>
 
     <img src="ZUiY.gif" alt="stars" class="star">
@@ -50,8 +50,7 @@
                 <div class="wishes">
                     <p>Dear Jelly,</p>
                     <p>Happy birthday!! I hope your day is filled with lots of love and laughter! May all of your
-                        birthday
-                        wishes come true.</p>
+                        birthday wishes come true.</p>
                     <p class="name">~ Your Motu❤️</p>
                 </div>
             </div>
@@ -70,25 +69,136 @@
 
         <div id="trainBelowCaption" class="stack-caption" aria-hidden="true" style="display:none;">&nbsp;</div>
     </section>
+
+    <div class="wish-container">
+        <h2 class="wish-title">Leave a Wish for Jelly! 💌</h2>
+
+        <div class="input-group">
+            <input type="text" id="wisherName" placeholder="তোমার নাম (Your Name)">
+            <textarea id="wisherMessage" placeholder="এখানে উইশ লেখো... (Write your wish)"></textarea>
+            <button onclick="sendWish()">Send Wish 🚀</button>
+        </div>
+
+        <div id="messagesArea" class="messages-list">
+        </div>
+    </div>
+
     <div id="imageLightbox" class="lightbox-modal">
         <span class="lightbox-close">&times;</span>
         <img class="lightbox-content" id="lightboxImg">
     </div>
 
-    <script>
-        // CONFIG
-        const imageCount = 33; // তোমার মোট ছবির সংখ্যা
-        const imgFolder = 'images'; // images ফোল্ডার
+    <script type="module">
+        // ==========================================
+        // 1. FIREBASE CONFIGURATION
+        // ==========================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, onChildAdded, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // ============ পরিবর্তন ১: নিজের পছন্দমতো ক্যাপশন ============
-        // নিচের লাইনে তোমার ২৫টি ছবির জন্য ২৫টি ক্যাপশন লিখবে। 
-        // যদি কম লেখো, বাকিগুলোতে খালি দেখাবে।
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9IMQ-_ZLHwPhWORBvrREGcwJ5ddg7y7M",
+            authDomain: "jellybirthday-e04c8.firebaseapp.com",
+            databaseURL: "https://jellybirthday-e04c8-default-rtdb.firebaseio.com",
+            projectId: "jellybirthday-e04c8",
+            storageBucket: "jellybirthday-e04c8.firebasestorage.app",
+            messagingSenderId: "567315973038",
+            appId: "1:567315973038:web:e0e64df2ccd05db0547e3f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const messagesRef = ref(db, 'wishes');
+
+        // --- Send Message Function ---
+        window.sendWish = function () {
+            const name = document.getElementById('wisherName').value;
+            const msg = document.getElementById('wisherMessage').value;
+
+            if (name.trim() === "" || msg.trim() === "") {
+                alert("Please enter both name and message!");
+                return;
+            }
+
+            push(messagesRef, {
+                name: name,
+                message: msg,
+                reply: ""
+            }).then(() => {
+                document.getElementById('wisherMessage').value = "";
+                alert("Wish Sent Successfully! ❤️");
+            }).catch((error) => {
+                alert("Error sending wish: " + error.message);
+            });
+        }
+
+        // --- Load Messages Function ---
+        onChildAdded(messagesRef, (snapshot) => {
+            const data = snapshot.val();
+            const key = snapshot.key;
+            addMessageToUI(key, data.name, data.message, data.reply);
+        });
+
+        function addMessageToUI(key, name, msg, reply) {
+            const list = document.getElementById('messagesArea');
+            const div = document.createElement('div');
+            div.className = 'message-card';
+            div.id = `msg-${key}`;
+
+            let replyHtml = reply ? `<div class="reply-text"><strong>Reply:</strong> ${reply}</div>` : '';
+
+            div.innerHTML = `
+                <div class="msg-name">${name} wrote:</div>
+                <div class="msg-text">${msg}</div>
+                <div id="reply-box-${key}">${replyHtml}</div>
+                <button class="admin-reply-btn" onclick="adminReply('${key}')">Reply</button>
+            `;
+            list.insertBefore(div, list.firstChild);
+        }
+
+        // --- Admin Reply Function ---
+        window.adminReply = function (key) {
+            const pass = prompt("Enter Admin Password to Reply:");
+            if (pass === "1234") {
+                const replyText = prompt("Type your reply:");
+                if (replyText) {
+                    const updates = {};
+                    updates['/wishes/' + key + '/reply'] = replyText;
+                    update(ref(db), updates);
+                    document.getElementById(`reply-box-${key}`).innerHTML = `<div class="reply-text"><strong>Reply:</strong> ${replyText}</div>`;
+                }
+            } else {
+                alert("Wrong Password! You cannot reply.");
+            }
+        }
+
+        // ==========================================
+        // 2. MUSIC ON FIRST CLICK LOGIC
+        // ==========================================
+        // পেজে যে কোনো জায়গায় ক্লিক করলে গান বাজবে
+        document.addEventListener('click', function() {
+            const bgMusic = document.getElementById('bgMusic');
+            // গান যদি পজ (paused) থাকে তবেই প্লে হবে
+            if(bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    console.log("Music started!");
+                }).catch(e => {
+                    console.log("Audio play failed:", e);
+                });
+            }
+        }, { once: true }); // { once: true } মানে এই কোডটা একবারই রান হবে
+
+        // ==========================================
+        // 3. GALLERY & CAPTION LOGIC
+        // ==========================================
+        const imageCount = 33;
+        const imgFolder = 'images';
+
         const customCaptions = [
-            "আমাদের সেই গাড়িতে করে পড়তে যাওয়া 😄",    // ছবি ১-এর ক্যাপশন
-            "আমাদের সেই পড়া থেকে বাড়ি ফেরারপথে স্কুলে গিয়েছিলাম তাই সেখানে গিয়ে ফটো তুললাম 😆", // ছবি ২-এর ক্যাপশন
-            "দুজনের একসাথে প্রথমবার কাকদ্বীপে দুর্গা ঠাকুর দেখতে যাওয়া 😊",   // ছবি ৩-এর ক্যাপশন
-            "এই সেই দিন যেদিন আমার প্রথম চশমা হারিয়ে গিয়েছিল 😅",   // ছবি ৪-এর ক্যাপশন
-            "অশোক স্যার এর বাড়িতে দুজনের দেখা করা 😜",      // ছবি ৫-এর ক্যাপশন
+            "আমাদের সেই গাড়িতে করে পড়তে যাওয়া 😄",
+            "আমাদের সেই পড়া থেকে বাড়ি ফেরারপথে স্কুলে গিয়েছিলাম তাই সেখানে গিয়ে ফটো তুললাম 😆",
+            "দুজনের একসাথে প্রথমবার কাকদ্বীপে দুর্গা ঠাকুর দেখতে যাওয়া 😊",
+            "এই সেই দিন যেদিন আমার প্রথম চশমা হারিয়ে গিয়েছিল 😅",
+            "অশোক স্যার এর বাড়িতে দুজনের দেখা করা 😜",
             "টিউশান থেকে ফেরার পথে ফটো তুলা 😁",
             "স্কুল থেকে টানা পড়তে গিয়ে স্যার আসার আগে ফটো তুলা 😂",
             "পড়তে গিয়ে স্যার আসেনি বলে ফটো তুলছিলাম 😆",
@@ -116,32 +226,17 @@
             "দুজনে 3দিন ঘুরলাম কলকাতায় এটা তৃতীয় দিনের ফটো মজা এসেছিল ঘুরে 🥰",
             "২০২৫ এ আবার আমরা সবাই মিলে কুল্পিতে গেলাম 🤫",
             "২০২৫ এর দুর্গা পূজায় শেষ দিন মায়ের দর্শন করতে গেলাম ম্যাডাম রেগে কামন মুখ বাকালো 😒",
-            "একটু দুজনের দিকে তাকিয়ে ভালো একটা ফটো তোলার উদ্যেশে 🤭",
-            // তোমার যদি ২৫টা ছবি থাকে তবে এখানে আরও লাইন যোগ করতে পারো
+            "একটু দুজনের দিকে তাকিয়ে ভালো একটা ফটো তোলার উদ্যেশে 🤭"
         ];
 
-        // যদি ক্যাপশন কম থাকে তবে বাকিগুলো অটোমেটিক পূরণ হবে
         const captions = Array.from({ length: imageCount }, (_, i) => customCaptions[i] || `স্মৃতি ${i + 1}`);
 
-
-        // ============ পরিবর্তন ২: মিউজিক প্লেয়ার স্ক্রিপ্ট ============
-        // পেজে ক্লিক করলেই গান বাজবে
-        document.body.addEventListener('click', function() {
-            var audio = document.getElementById("bgMusic");
-            if (audio.paused) {
-                audio.play();
-            }
-        }, { once: true }); // একবার ক্লিক করলেই ইভেন্টটি সরে যাবে
-
-
-        // DOM refs
         const trainStack = document.getElementById('trainStack');
         const trainArea = document.getElementById('trainArea');
         const lightbox = document.getElementById('imageLightbox');
         const lightboxImg = document.getElementById('lightboxImg');
         const lightboxClose = document.querySelector('.lightbox-close');
 
-        // build cards
         const cards = [];
         for (let i = 1; i <= imageCount; i++) {
             const num = String(i).padStart(2, '0');
@@ -160,7 +255,6 @@
             trainStack.appendChild(card);
             cards.push(card);
 
-            // Lightbox Click Listener
             card.addEventListener('click', () => {
                 if (card.classList.contains('top')) {
                     stopCycle();
@@ -170,7 +264,6 @@
             });
         }
 
-        // stacking
         let current = 0;
         function applyStackClasses(activeIndex) {
             for (let i = 0; i < cards.length; i++) {
@@ -186,7 +279,6 @@
         }
         applyStackClasses(current);
 
-        // Lightbox Close Listener
         lightboxClose.addEventListener('click', () => {
             lightbox.style.display = 'none';
             startCycle();
@@ -198,7 +290,6 @@
             }
         });
 
-        // flip
         function performTransition(fromIdx, toIdx, dir = 'next') {
             if (fromIdx === toIdx) return;
             const outgoing = cards[fromIdx];
@@ -221,26 +312,21 @@
         function doFlip() { performTransition(current, (current + 1) % cards.length, 'next'); }
         function doPrevFlip() { performTransition(current, (current - 1 + cards.length) % cards.length, 'prev'); }
 
-        // autoplay
         let intervalMs = 3000;
         let cycleTimer = null;
         function startCycle() { if (cycleTimer) return; cycleTimer = setInterval(doFlip, intervalMs); }
         function stopCycle() { if (!cycleTimer) return; clearInterval(cycleTimer); cycleTimer = null; }
         setTimeout(() => startCycle(), 1500);
 
-        // pause on hover
         trainArea.addEventListener('mouseenter', stopCycle);
         trainArea.addEventListener('mouseleave', startCycle);
 
-        // manual nav
         document.getElementById('trainPrev').addEventListener('click', (e) => { e.stopPropagation(); stopCycle(); doPrevFlip(); setTimeout(() => startCycle(), intervalMs + 200); });
         document.getElementById('trainNext').addEventListener('click', (e) => { e.stopPropagation(); stopCycle(); doFlip(); setTimeout(() => startCycle(), intervalMs + 200); });
 
-        // keyboard
         document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { stopCycle(); doFlip(); setTimeout(() => startCycle(), intervalMs + 200); } else if (e.key === 'ArrowLeft') { stopCycle(); doPrevFlip(); setTimeout(() => startCycle(), intervalMs + 200); } });
 
     </script>
-
 </body>
 
 </html>
